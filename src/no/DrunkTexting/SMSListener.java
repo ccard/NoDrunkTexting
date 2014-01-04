@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.telephony.SmsMessage;
 
+import com.google.android.mms.pdu.*;
+import com.google.android.mms.util.*;
+
+
 
 /**
  * {description}
@@ -55,7 +59,13 @@ public class SMSListener extends BroadcastReceiver {
             }
         } else if (intent.getAction().equals("android.provider.Telephony.WAP_PUSH_RECEIVED")) {
             byte[] pushData = intent.getByteArrayExtra("data");
-            PduParser parser =  new Pd
+            PduParser parser = new PduParser();
         }
+    }
+
+    public class MMSInfo{
+        public String Name = "";
+        public String MimeType = "";
+        public byte[] Data;
     }
 }
