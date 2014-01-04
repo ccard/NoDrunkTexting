@@ -36,5 +36,15 @@
         <provider android:authorities="no.DrunkTexting" android:name=".ConversationProvider"
                   android:enabled="true" android:syncable="true"
                   android:icon="@drawable/ic_launcher"/>
+        <receiver android:name=".SMSListener"
+                  android:enabled="true">
+                <intent-filter>
+                    <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="android.provider.Telephony.WAP_PUSH_RECEIVED"/>
+                    <data android:mimeType="application/vnd.wap.mms-message"/>
+                </intent-filter>
+        </receiver>
     </application>
 </manifest>
