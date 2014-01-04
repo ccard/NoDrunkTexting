@@ -60,6 +60,7 @@ public class SMSListener extends BroadcastReceiver {
         } else if (intent.getAction().equals("android.provider.Telephony.WAP_PUSH_RECEIVED")) {
             byte[] pushData = intent.getByteArrayExtra("data");
             PduParser parser = new PduParser();
+            //TODO continue to work on the tutorial http://forum.xda-developers.com/showthread.php?t=2222703
         }
     }
 
