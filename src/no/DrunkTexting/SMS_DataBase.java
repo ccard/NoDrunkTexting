@@ -154,37 +154,30 @@ public class SMS_DataBase extends SQLiteOpenHelper {
             cv = new ContentValues();
         }
 
-        public void setAddress(String address){
+        public ContentBuilder setAddress(String address){
             cv.put(ADDRESS,address);
+            return this;
         }
 
-        public void setBody(String body){
+        public ContentBuilder setBody(String body){
             cv.put(BODY,body);
+            return this;
         }
 
-        public void setRead(String read){
+        public ContentBuilder setRead(String read){
             cv.put(READ,(read == "1" ? 1:0));
+            return this;
         }
 
-        public void setDate(String date){
-            SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd kk:mm:ss.sss");
-            Date d = null;
-            try {
-                d = sdf.parse(date);
-            } catch (ParseException e) {
-                Log.e("#Date parse#", e.getStackTrace().toString());
-            }
-
-            if (null != d){
-                cv.put(DATE,d.getTime());
-            } else {
-                cv.put(DATE,System.currentTimeMillis());
-            }
+        public ContentBuilder setDate(int date){
+            cv.put(DATE,date);
+            return this;
         }
 
-        public void setRecieveSend(String recv_sent){
+        public ContentBuilder setRecieveSend(String recv_sent){
             cv.put(RECEIVED_SENT,
                     Integer.parseInt(recv_sent));
+            return this;
         }
 
         public ContentValues build(){
