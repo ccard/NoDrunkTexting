@@ -75,7 +75,7 @@ public class DrmConvertSession {
     /**
      * Convert a buffer of data to protected format.
      *
-     * @param buffer Buffer filled with data to convert.
+     * @param inBuffer Buffer filled with data to convert.
      * @param size The number of bytes that shall be converted.
      * @return A Buffer filled with converted data, if execution is ok, in all
      *         other case null.

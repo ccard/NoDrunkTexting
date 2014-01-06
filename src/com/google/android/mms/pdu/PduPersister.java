@@ -78,7 +78,7 @@ public class PduPersister {
      * The uri of temporary drm objects.
      */
     public static final String TEMPORARY_DRM_OBJECT_URI =
-        "content://mms/" + Long.MAX_VALUE + "/part";
+            "content://mms/" + Long.MAX_VALUE + "/part";
     /**
      * Indicate that we transiently failed to process a MM.
      */
@@ -103,33 +103,33 @@ public class PduPersister {
     };
 
     private static final String[] PDU_PROJECTION = new String[] {
-        Mms._ID,
-        Mms.MESSAGE_BOX,
-        Mms.THREAD_ID,
-        Mms.RETRIEVE_TEXT,
-        Mms.SUBJECT,
-        Mms.CONTENT_LOCATION,
-        Mms.CONTENT_TYPE,
-        Mms.MESSAGE_CLASS,
-        Mms.MESSAGE_ID,
-        Mms.RESPONSE_TEXT,
-        Mms.TRANSACTION_ID,
-        Mms.CONTENT_CLASS,
-        Mms.DELIVERY_REPORT,
-        Mms.MESSAGE_TYPE,
-        Mms.MMS_VERSION,
-        Mms.PRIORITY,
-        Mms.READ_REPORT,
-        Mms.READ_STATUS,
-        Mms.REPORT_ALLOWED,
-        Mms.RETRIEVE_STATUS,
-        Mms.STATUS,
-        Mms.DATE,
-        Mms.DELIVERY_TIME,
-        Mms.EXPIRY,
-        Mms.MESSAGE_SIZE,
-        Mms.SUBJECT_CHARSET,
-        Mms.RETRIEVE_TEXT_CHARSET,
+            Mms._ID,
+            Mms.MESSAGE_BOX,
+            Mms.THREAD_ID,
+            Mms.RETRIEVE_TEXT,
+            Mms.SUBJECT,
+            Mms.CONTENT_LOCATION,
+            Mms.CONTENT_TYPE,
+            Mms.MESSAGE_CLASS,
+            Mms.MESSAGE_ID,
+            Mms.RESPONSE_TEXT,
+            Mms.TRANSACTION_ID,
+            Mms.CONTENT_CLASS,
+            Mms.DELIVERY_REPORT,
+            Mms.MESSAGE_TYPE,
+            Mms.MMS_VERSION,
+            Mms.PRIORITY,
+            Mms.READ_REPORT,
+            Mms.READ_STATUS,
+            Mms.REPORT_ALLOWED,
+            Mms.RETRIEVE_STATUS,
+            Mms.STATUS,
+            Mms.DATE,
+            Mms.DELIVERY_TIME,
+            Mms.EXPIRY,
+            Mms.MESSAGE_SIZE,
+            Mms.SUBJECT_CHARSET,
+            Mms.RETRIEVE_TEXT_CHARSET,
     };
 
     private static final int PDU_COLUMN_ID                    = 0;
@@ -161,15 +161,15 @@ public class PduPersister {
     private static final int PDU_COLUMN_RETRIEVE_TEXT_CHARSET = 26;
 
     private static final String[] PART_PROJECTION = new String[] {
-        Part._ID,
-        Part.CHARSET,
-        Part.CONTENT_DISPOSITION,
-        Part.CONTENT_ID,
-        Part.CONTENT_LOCATION,
-        Part.CONTENT_TYPE,
-        Part.FILENAME,
-        Part.NAME,
-        Part.TEXT
+            Part._ID,
+            Part.CHARSET,
+            Part.CONTENT_DISPOSITION,
+            Part.CONTENT_ID,
+            Part.CONTENT_LOCATION,
+            Part.CONTENT_TYPE,
+            Part.FILENAME,
+            Part.NAME,
+            Part.TEXT
     };
 
     private static final int PART_COLUMN_ID                  = 0;
@@ -275,7 +275,7 @@ public class PduPersister {
         LONG_COLUMN_NAME_MAP.put(PduHeaders.MESSAGE_SIZE, Mms.MESSAGE_SIZE);
 
         PDU_CACHE_INSTANCE = PduCache.getInstance();
-     }
+    }
 
     private final Context mContext;
     private final ContentResolver mContentResolver;
@@ -288,7 +288,7 @@ public class PduPersister {
         mDrmManagerClient = new DrmManagerClient(context);
         mTelephonyManager = (TelephonyManager)context
                 .getSystemService(Context.TELEPHONY_SERVICE);
-     }
+    }
 
     /** Get(or create if not exist) an instance of PduPersister */
     public static PduPersister getPduPersister(Context context) {
@@ -438,7 +438,7 @@ public class PduPersister {
                             || ContentType.TEXT_HTML.equals(type)) {
                         String text = c.getString(PART_COLUMN_TEXT);
                         byte [] blob = new EncodedStringValue(text != null ? text : "")
-                            .getTextString();
+                                .getTextString();
                         baos.write(blob, 0, blob.length);
                     } else {
 
@@ -616,52 +616,52 @@ public class PduPersister {
             }
 
             switch (msgType) {
-            case PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND:
-                pdu = new NotificationInd(headers);
-                break;
-            case PduHeaders.MESSAGE_TYPE_DELIVERY_IND:
-                pdu = new DeliveryInd(headers);
-                break;
-            case PduHeaders.MESSAGE_TYPE_READ_ORIG_IND:
-                pdu = new ReadOrigInd(headers);
-                break;
-            case PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF:
-                pdu = new RetrieveConf(headers, body);
-                break;
-            case PduHeaders.MESSAGE_TYPE_SEND_REQ:
-                pdu = new SendReq(headers, body);
-                break;
-            case PduHeaders.MESSAGE_TYPE_ACKNOWLEDGE_IND:
-                pdu = new AcknowledgeInd(headers);
-                break;
-            case PduHeaders.MESSAGE_TYPE_NOTIFYRESP_IND:
-                pdu = new NotifyRespInd(headers);
-                break;
-            case PduHeaders.MESSAGE_TYPE_READ_REC_IND:
-                pdu = new ReadRecInd(headers);
-                break;
-            case PduHeaders.MESSAGE_TYPE_SEND_CONF:
-            case PduHeaders.MESSAGE_TYPE_FORWARD_REQ:
-            case PduHeaders.MESSAGE_TYPE_FORWARD_CONF:
-            case PduHeaders.MESSAGE_TYPE_MBOX_STORE_REQ:
-            case PduHeaders.MESSAGE_TYPE_MBOX_STORE_CONF:
-            case PduHeaders.MESSAGE_TYPE_MBOX_VIEW_REQ:
-            case PduHeaders.MESSAGE_TYPE_MBOX_VIEW_CONF:
-            case PduHeaders.MESSAGE_TYPE_MBOX_UPLOAD_REQ:
-            case PduHeaders.MESSAGE_TYPE_MBOX_UPLOAD_CONF:
-            case PduHeaders.MESSAGE_TYPE_MBOX_DELETE_REQ:
-            case PduHeaders.MESSAGE_TYPE_MBOX_DELETE_CONF:
-            case PduHeaders.MESSAGE_TYPE_MBOX_DESCR:
-            case PduHeaders.MESSAGE_TYPE_DELETE_REQ:
-            case PduHeaders.MESSAGE_TYPE_DELETE_CONF:
-            case PduHeaders.MESSAGE_TYPE_CANCEL_REQ:
-            case PduHeaders.MESSAGE_TYPE_CANCEL_CONF:
-                throw new MmsException(
-                        "Unsupported PDU type: " + Integer.toHexString(msgType));
+                case PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND:
+                    pdu = new NotificationInd(headers);
+                    break;
+                case PduHeaders.MESSAGE_TYPE_DELIVERY_IND:
+                    pdu = new DeliveryInd(headers);
+                    break;
+                case PduHeaders.MESSAGE_TYPE_READ_ORIG_IND:
+                    pdu = new ReadOrigInd(headers);
+                    break;
+                case PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF:
+                    pdu = new RetrieveConf(headers, body);
+                    break;
+                case PduHeaders.MESSAGE_TYPE_SEND_REQ:
+                    pdu = new SendReq(headers, body);
+                    break;
+                case PduHeaders.MESSAGE_TYPE_ACKNOWLEDGE_IND:
+                    pdu = new AcknowledgeInd(headers);
+                    break;
+                case PduHeaders.MESSAGE_TYPE_NOTIFYRESP_IND:
+                    pdu = new NotifyRespInd(headers);
+                    break;
+                case PduHeaders.MESSAGE_TYPE_READ_REC_IND:
+                    pdu = new ReadRecInd(headers);
+                    break;
+                case PduHeaders.MESSAGE_TYPE_SEND_CONF:
+                case PduHeaders.MESSAGE_TYPE_FORWARD_REQ:
+                case PduHeaders.MESSAGE_TYPE_FORWARD_CONF:
+                case PduHeaders.MESSAGE_TYPE_MBOX_STORE_REQ:
+                case PduHeaders.MESSAGE_TYPE_MBOX_STORE_CONF:
+                case PduHeaders.MESSAGE_TYPE_MBOX_VIEW_REQ:
+                case PduHeaders.MESSAGE_TYPE_MBOX_VIEW_CONF:
+                case PduHeaders.MESSAGE_TYPE_MBOX_UPLOAD_REQ:
+                case PduHeaders.MESSAGE_TYPE_MBOX_UPLOAD_CONF:
+                case PduHeaders.MESSAGE_TYPE_MBOX_DELETE_REQ:
+                case PduHeaders.MESSAGE_TYPE_MBOX_DELETE_CONF:
+                case PduHeaders.MESSAGE_TYPE_MBOX_DESCR:
+                case PduHeaders.MESSAGE_TYPE_DELETE_REQ:
+                case PduHeaders.MESSAGE_TYPE_DELETE_CONF:
+                case PduHeaders.MESSAGE_TYPE_CANCEL_REQ:
+                case PduHeaders.MESSAGE_TYPE_CANCEL_CONF:
+                    throw new MmsException(
+                            "Unsupported PDU type: " + Integer.toHexString(msgType));
 
-            default:
-                throw new MmsException(
-                        "Unrecognized PDU type: " + Integer.toHexString(msgType));
+                default:
+                    throw new MmsException(
+                            "Unrecognized PDU type: " + Integer.toHexString(msgType));
             }
         } finally {
             synchronized(PDU_CACHE_INSTANCE) {
@@ -778,7 +778,7 @@ public class PduPersister {
      *         while saving the data.
      */
     private void persistData(PduPart part, Uri uri,
-            String contentType, HashMap<Uri, InputStream> preOpenedFiles)
+                             String contentType, HashMap<Uri, InputStream> preOpenedFiles)
             throws MmsException {
         OutputStream os = null;
         InputStream is = null;
@@ -907,8 +907,8 @@ public class PduPersister {
                 File f = new File(path);
                 ContentValues values = new ContentValues(0);
                 SqliteWrapper.update(mContext, mContentResolver,
-                                     Uri.parse("content://mms/resetFilePerm/" + f.getName()),
-                                     values, null, null);
+                        Uri.parse("content://mms/resetFilePerm/" + f.getName()),
+                        values, null, null);
             }
         }
     }
@@ -1232,7 +1232,7 @@ public class PduPersister {
      */
 
     public Uri persist(GenericPdu pdu, Uri uri, boolean createThreadId, boolean groupMmsEnabled,
-            HashMap<Uri, InputStream> preOpenedFiles)
+                       HashMap<Uri, InputStream> preOpenedFiles)
             throws MmsException {
         if (uri == null) {
             throw new MmsException("Uri may not be null.");
@@ -1248,9 +1248,9 @@ public class PduPersister {
         if (!existingUri && MESSAGE_BOX_MAP.get(uri) == null) {
             throw new MmsException(
                     "Bad destination, must be one of "
-                    + "content://mms/inbox, content://mms/sent, "
-                    + "content://mms/drafts, content://mms/outbox, "
-                    + "content://mms/temp.");
+                            + "content://mms/inbox, content://mms/sent, "
+                            + "content://mms/drafts, content://mms/outbox, "
+                            + "content://mms/temp.");
         }
         synchronized(PDU_CACHE_INSTANCE) {
             // If the cache item is getting updated, wait until it's done updating before
@@ -1417,8 +1417,8 @@ public class PduPersister {
         values = new ContentValues(1);
         values.put(Part.MSG_ID, msgId);
         SqliteWrapper.update(mContext, mContentResolver,
-                             Uri.parse("content://mms/" + dummyId + "/part"),
-                             values, null, null);
+                Uri.parse("content://mms/" + dummyId + "/part"),
+                values, null, null);
         // We should return the longest URI of the persisted PDU, for
         // example, if input URI is "content://mms/inbox" and the _ID of
         // persisted PDU is '8', we should return "content://mms/inbox/8"
@@ -1448,7 +1448,7 @@ public class PduPersister {
      * @param excludeMyNumber if true, the number of this phone will be excluded from recipients
      */
     private void loadRecipients(int addressType, HashSet<String> recipients,
-            HashMap<Integer, EncodedStringValue[]> addressMap, boolean excludeMyNumber) {
+                                HashMap<Integer, EncodedStringValue[]> addressMap, boolean excludeMyNumber) {
         EncodedStringValue[] array = addressMap.get(addressType);
         if (array == null) {
             return;
@@ -1494,9 +1494,9 @@ public class PduPersister {
         if (msgBox == null) {
             throw new MmsException(
                     "Bad destination, must be one of "
-                    + "content://mms/inbox, content://mms/sent, "
-                    + "content://mms/drafts, content://mms/outbox, "
-                    + "content://mms/temp.");
+                            + "content://mms/inbox, content://mms/sent, "
+                            + "content://mms/drafts, content://mms/outbox, "
+                            + "content://mms/temp.");
         }
 
         ContentValues values = new ContentValues(1);
