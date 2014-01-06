@@ -4,13 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.telephony.SmsMessage;
 
+import android.util.Log;
 import com.google.android.mms.pdu.*;
-import com.google.android.mms.util.*;
 
+import java.io.*;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -55,18 +59,89 @@ public class SMSListener extends BroadcastReceiver {
                                     .setRecieveSend("1")
                                     .build();
                     help.newReceivedSMS(c);
+                    help.close();
                 }
             }
         } else if (intent.getAction().equals("android.provider.Telephony.WAP_PUSH_RECEIVED")) {
+            SMS_DataBase help = new SMS_DataBase(context);
             byte[] pushData = intent.getByteArrayExtra("data");
-            PduParser parser = new PduParser();
-            //TODO continue to work on the tutorial http://forum.xda-developers.com/showthread.php?t=2222703
+            PduParser parser = new PduParser(pushData);
+            GenericPdu pdu = parser.parse();
+
+            if (pdu.getMessageType() == PduHeaders.MESSAGE_TYPE_DELIVERY_IND)
+            {
+                int status = ((DeliveryInd)pdu).getStatus();
+                if (status == PduHeaders.STATUS_RETRIEVED)
+                {
+                    String uristring = "content://mms/part";
+                    int id = ByteBuffer.wrap(((DeliveryInd) pdu).getMessageId()).getInt();
+                    String from = pdu.getFrom().getString();
+                    String body = "";
+
+                    Cursor c = context.getContentResolver().query(Uri.parse(uristring),null,
+                            "mid="+id,null,null);
+
+                    if (c.moveToFirst()){
+                        do {
+                            String partId = c.getString(c.getColumnIndex("_id"));
+                            String type = c.getString(c.getColumnIndex("ct"));
+                            if ("text/plain".equals(type)){
+                                String data = c.getString(c.getColumnIndex("_data"));
+                                if (null != data){
+                                    body = getMmsText(partId,context);
+                                } else {
+                                    body = c.getString(c.getColumnIndex("text"));
+                                }
+                            } else {
+                                //TODO create method for getting images
+                            }
+                        } while (c.moveToNext());
+                    }
+
+                    ContentValues cv = new SMS_DataBase.ContentBuilder()
+                                        .setAddress(from)
+                                        .setRead("0")
+                                        .setBody(body)
+                                        .setDate((int) ((DeliveryInd) pdu).getDate())
+                                        .setRecieveSend("1")
+                                        .build();
+
+                    help.newReceivedSMS(cv);
+                    help.close();
+                }
+            }
         }
     }
 
-    public class MMSInfo{
-        public String Name = "";
-        public String MimeType = "";
-        public byte[] Data;
+    private String getMmsText(String id, Context context){
+        Uri partURI = Uri.parse("content://mms/part/"+id);
+        InputStream in = null;
+        StringBuilder body = new StringBuilder();
+
+        try {
+            in = context.getContentResolver().openInputStream(partURI);
+            if (null != in) {
+                BufferedReader read = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+                String temp;
+                while ((temp = read.readLine()) != null) body.append(temp);
+            }
+        } catch (FileNotFoundException e) {
+            Log.e("MMS PARSER",e.getStackTrace().toString());
+        } catch (UnsupportedEncodingException e) {
+            Log.e("MMS PARSER",e.getStackTrace().toString());
+        }  catch (IOException e) {
+            Log.e("MMS PARSER",e.getStackTrace().toString());
+        }finally {
+            if (null != in) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    Log.e("MMS PARSER",e.getStackTrace().toString());
+                }
+            }
+        }
+        return body.toString();
     }
+
+
 }
